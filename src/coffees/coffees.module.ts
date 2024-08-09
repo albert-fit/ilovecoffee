@@ -7,8 +7,6 @@ import { Flavor } from './entities/flavor.entitiy';
 import { COFFEE_BRANDS } from './coffees.constants';
 
 class ConfigService {}
-class DevelopmentConfigService {}
-class ProductionConfigService {}
 
 @Injectable()
 export class CoffeeBrandsFactory {
@@ -25,10 +23,7 @@ export class CoffeeBrandsFactory {
     CoffeeBrandsFactory,
     {
       provide: ConfigService,
-      useClass:
-        process.env.NODE_ENV === 'development'
-          ? DevelopmentConfigService
-          : ProductionConfigService,
+      useFactory: () => ['buddy brew', 'nescafe'],
     },
     { provide: COFFEE_BRANDS, useFactory: () => ['buddy brew', 'nescafe'] },
   ],
