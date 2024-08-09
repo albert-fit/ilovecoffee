@@ -35,14 +35,28 @@ export class CoffeesService {
   }
 
   async create(createCoffeeDto: CreateCoffeeDto) {
-    const coffee = this.coffeeRepository.create(createCoffeeDto);
+    const flavors = await Promise.all(
+      //waits until the entire array of promises finishes before executing the rest of the code
+      createCoffeeDto.flavors.map((name) => this.preloadFlavorByName(name)),
+    );
+    const coffee = this.coffeeRepository.create({
+      ...createCoffeeDto,
+      flavors,
+    });
     return this.coffeeRepository.save(coffee);
   }
 
   async update(id: string, updateCoffeeDto: UpdateCoffeeDto) {
+    const flavors =
+      updateCoffeeDto.flavors &&
+      (await Promise.all(
+        updateCoffeeDto.flavors.map((name) => this.preloadFlavorsByName(name)),
+      ));
+
     const coffee = await this.coffeeRepository.preload({
       id: +id,
       ...updateCoffeeDto,
+      flavors,
     });
     if (!coffee) {
       throw new NotFoundException(`Coffee #${id} not found`);
