@@ -1,4 +1,4 @@
-import { Injectable, Module } from '@nestjs/common';
+import { Injectable, Module, Scope } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoffeesController } from './coffees.controller';
 import { CoffeesService } from './coffees.service';
@@ -9,7 +9,7 @@ import { Connection } from 'typeorm';
 
 class ConfigService {}
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class CoffeeBrandsFactory {
   create() {
     /* ... do something ... */
@@ -28,6 +28,7 @@ export class CoffeeBrandsFactory {
     },
     {
       provide: COFFEE_BRANDS,
+      scope: Scope.TRANSIENT,
       useFactory: async (connection: Connection): Promise<string[]> => {
         const coffeeBrands = await Promise.resolve(['buddy brew', 'nescafe']);
         console.log('Factory');

@@ -6,8 +6,10 @@ import { DatabaseModule } from 'src/database/database.module';
 @Module({
   imports: [
     DatabaseModule.register({
-      type: 'postgress',
+      type: 'postgres',
       host: 'localhost',
+      username: 'postgres',
+      password: 'pass123',
       port: 5432,
     }),
     CoffeesModule,
