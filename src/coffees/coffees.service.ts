@@ -21,8 +21,8 @@ export class CoffeesService {
     private readonly configService: ConfigService,
     @Inject(COFFEE_BRANDS) coffeeBrands: string[],
   ) {
-    const databaseHost = this.configService.get<string>('DATABASE_HOST');
-    console.log(databaseHost);
+    const coffeesConfig = this.configService.get('coffees');
+    console.log(coffeesConfig);
   }
 
   async findAll(paginationQuery: PaginationQueryDto) {
